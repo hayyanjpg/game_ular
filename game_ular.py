@@ -99,8 +99,11 @@ def gameLoop():
     game_over = False
     game_close = False
 
-    x = width // 2
-    y = height // 2
+    # === PERBAIKAN DI SINI ===
+    # Memastikan posisi awal ular sejajar dengan grid
+    x = round((width / 4) / block) * block
+    y = round((height / 2) / block) * block
+    
     x_change = block
     y_change = 0
 
