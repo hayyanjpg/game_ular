@@ -1,7 +1,7 @@
 import pygame
 import random
+import os
 
-# Inisialisasi Pygame
 pygame.init()
 
 # Warna
@@ -10,44 +10,53 @@ black = (0, 0, 0)
 red = (200, 0, 0)
 green = (0, 200, 0)
 blue = (0, 0, 255)
-gray = (100, 100, 100)
+gray = (180, 180, 180)
 
-# Ukuran layar
+# Ukuran layar & blok
 width = 600
 height = 400
-
-# Ukuran blok ular & kecepatan
 block = 20
 speed = 15
 
-# Setup layar
 win = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Game Snake by Hayyan")
+pygame.display.set_caption("Game Snake dengan Sound & Grid")
 
-# Font
 font = pygame.font.SysFont("comicsansms", 25)
-
 clock = pygame.time.Clock()
 
-# Fungsi tampilkan teks
+# Load suara makan
+try:
+    eat_sound = pygame.mixer.Sound("suara_makan.mp3")
+except:
+    eat_sound = None
+    print("⚠️ Suara tidak ditemukan! Pastikan file eat.wav ada di folder ini.")
+
+# Gambar tulisan
 def draw_text(msg, color, x, y):
     text = font.render(msg, True, color)
     win.blit(text, [x, y])
 
-# Fungsi untuk menggambar ular
+# Gambar ular
 def draw_snake(snake_list):
     for x in snake_list:
         pygame.draw.rect(win, green, [x[0], x[1], block, block])
 
-# Fungsi gambar tembok
+# Gambar tembok
 def draw_walls():
     wall_thickness = block
-    pygame.draw.rect(win, gray, [0, 0, width, wall_thickness])  # atas
-    pygame.draw.rect(win, gray, [0, height - wall_thickness, width, wall_thickness])  # bawah
-    pygame.draw.rect(win, gray, [0, 0, wall_thickness, height])  # kiri
-    pygame.draw.rect(win, gray, [width - wall_thickness, 0, wall_thickness, height])  # kanan
+    pygame.draw.rect(win, black, [0, 0, width, wall_thickness])
+    pygame.draw.rect(win, black, [0, height - wall_thickness, width, wall_thickness])
+    pygame.draw.rect(win, black, [0, 0, wall_thickness, height])
+    pygame.draw.rect(win, black, [width - wall_thickness, 0, wall_thickness, height])
 
-# Menu Awal
+# Gambar grid tiap blok
+def draw_grid():
+    for x in range(0, width, block):
+        pygame.draw.line(win, gray, (x, 0), (x, height))
+    for y in range(0, height, block):
+        pygame.draw.line(win, gray, (0, y), (width, y))
+
+# Menu awal
 def game_intro():
     intro = True
     while intro:
@@ -65,7 +74,7 @@ def game_intro():
                 if event.key == pygame.K_SPACE:
                     intro = False
 
-# Fungsi utama game
+# Game utama
 def gameLoop():
     game_over = False
     game_close = False
@@ -82,7 +91,6 @@ def gameLoop():
     foody = round(random.randrange(block, height - 2 * block) / block) * block
 
     while not game_over:
-
         while game_close:
             win.fill(white)
             draw_text("KAMU KALAH! Tekan [C] untuk Coba Lagi atau [Q] untuk Keluar", red, 30, height // 3)
@@ -90,16 +98,13 @@ def gameLoop():
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    game_over = True
-                    game_close = False
+                    game_over = True; game_close = False
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
-                        game_over = True
-                        game_close = False
+                        game_over = True; game_close = False
                     if event.key == pygame.K_c:
                         gameLoop()
 
-        # tombol input di dalam game
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
@@ -116,21 +121,19 @@ def gameLoop():
         x += x_change
         y += y_change
 
-        # Cek tabrakan dengan tembok
         if x < block or x >= width - block or y < block or y >= height - block:
             game_close = True
 
         win.fill(white)
+        draw_grid()
         draw_walls()
         pygame.draw.rect(win, red, [foodx, foody, block, block])
 
         snake_head = [x, y]
         snake_list.append(snake_head)
-
         if len(snake_list) > snake_length:
             del snake_list[0]
 
-        # Cek tabrakan dengan badan sendiri
         for segment in snake_list[:-1]:
             if segment == snake_head:
                 game_close = True
@@ -140,17 +143,18 @@ def gameLoop():
 
         pygame.display.update()
 
-        # Cek jika makan makanan
         if x == foodx and y == foody:
             foodx = round(random.randrange(block, width - 2 * block) / block) * block
             foody = round(random.randrange(block, height - 2 * block) / block) * block
             snake_length += 1
+            if eat_sound:
+                eat_sound.play()
 
         clock.tick(speed)
 
     pygame.quit()
     quit()
 
-# Jalankan game
+# Mulai game
 game_intro()
 gameLoop()
