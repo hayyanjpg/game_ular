@@ -1,10 +1,16 @@
 import pygame
 import random
-import os
 
+# Inisialisasi pygame
 pygame.init()
+pygame.mixer.init()
 
-# Warna
+# Ukuran dan warna
+width = 600
+height = 400
+block = 20
+speed = 15
+
 white = (255, 255, 255)
 black = (0, 0, 0)
 red = (200, 0, 0)
@@ -12,26 +18,28 @@ green = (0, 200, 0)
 blue = (0, 0, 255)
 gray = (180, 180, 180)
 
-# Ukuran layar & blok
-width = 600
-height = 400
-block = 20
-speed = 15
-
 win = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Game Snake dengan Sound & Grid")
+pygame.display.set_caption("Game Snake Versi Lengkap")
 
 font = pygame.font.SysFont("comicsansms", 25)
 clock = pygame.time.Clock()
 
-# Load suara makan
+# Load musik & sound
+try:
+    pygame.mixer.music.load("backsound.wav")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(-1)
+except:
+    print("⚠️ Gagal memuat backsound.wav")
+
 try:
     eat_sound = pygame.mixer.Sound("suara_makan.mp3")
+    eat_sound.set_volume(0.6)
 except:
     eat_sound = None
-    print("⚠️ Suara tidak ditemukan! Pastikan file eat.wav ada di folder ini.")
+    print("⚠️ Gagal memuat suara_makan.mp3")
 
-# Gambar tulisan
+# Gambar teks
 def draw_text(msg, color, x, y):
     text = font.render(msg, True, color)
     win.blit(text, [x, y])
@@ -43,13 +51,12 @@ def draw_snake(snake_list):
 
 # Gambar tembok
 def draw_walls():
-    wall_thickness = block
-    pygame.draw.rect(win, black, [0, 0, width, wall_thickness])
-    pygame.draw.rect(win, black, [0, height - wall_thickness, width, wall_thickness])
-    pygame.draw.rect(win, black, [0, 0, wall_thickness, height])
-    pygame.draw.rect(win, black, [width - wall_thickness, 0, wall_thickness, height])
+    pygame.draw.rect(win, black, [0, 0, width, block])  # atas
+    pygame.draw.rect(win, black, [0, height - block, width, block])  # bawah
+    pygame.draw.rect(win, black, [0, 0, block, height])  # kiri
+    pygame.draw.rect(win, black, [width - block, 0, block, height])  # kanan
 
-# Gambar grid tiap blok
+# Gambar grid langkah
 def draw_grid():
     for x in range(0, width, block):
         pygame.draw.line(win, gray, (x, 0), (x, height))
@@ -155,6 +162,6 @@ def gameLoop():
     pygame.quit()
     quit()
 
-# Mulai game
+# Jalankan game
 game_intro()
 gameLoop()
