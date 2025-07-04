@@ -2,7 +2,7 @@ import pygame
 import random
 
 pygame.init()
-pygame.mixer.init()
+pygame.mixer.init() # Inisialisasi mixer tetap di sini
 
 # Ukuran layar dan blok
 width = 600
@@ -23,14 +23,10 @@ pygame.display.set_caption("Snake Game Level Edition")
 font = pygame.font.SysFont("comicsansms", 25)
 clock = pygame.time.Clock()
 
-# Load backsound & suara makan
-try:
-    pygame.mixer.music.load("backsound.mp3")
-    pygame.mixer.music.set_volume(0.3)
-    pygame.mixer.music.play(-1)
-except:
-    print("⚠️ backsound.mp3 tidak ditemukan")
+# Hapus pemuatan musik awal dari sini
+# Musik akan dimuat berdasarkan level yang dipilih
 
+# Load suara makan (ini tetap sama)
 try:
     eat_sound = pygame.mixer.Sound("suara_makan.mp3")
     eat_sound.set_volume(0.6)
@@ -73,6 +69,15 @@ def choose_level():
     levels = ["baby", "sangat noob", "noob", "ez", "normal", "hard", "expert"]
     selected = 0
     choosing = True
+    
+    # Memainkan musik default untuk menu pemilihan level
+    try:
+        pygame.mixer.music.load("backsound.wav")
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(-1)
+    except pygame.error:
+        print("⚠️ backsound.mp3 tidak ditemukan untuk menu")
+
     while choosing:
         win.fill(white)
         draw_text("Pilih Level (↑↓, ENTER):", blue, 30, 30)
@@ -91,19 +96,36 @@ def choose_level():
                     selected = (selected + 1) % len(levels)
                 elif event.key == pygame.K_RETURN:
                     choosing = False
+    
+    pygame.mixer.music.stop() # Hentikan musik menu sebelum memulai level
     return levels[selected]
 
 def gameLoop():
     level_name = choose_level()
     speed, wall_defs = get_level_data(level_name)
+    
+    # === PERUBAHAN MUSIK BERDASARKAN LEVEL ===
+    if level_name in ["normal", "hard"]:
+        music_file = "menengah.wav"
+    elif level_name == "expert":
+        music_file = "mencekam.mp3"
+    else: # Untuk level baby, sangat noob, noob, dan ez
+        music_file = "backsound.wav"
+    
+    try:
+        pygame.mixer.music.load(music_file)
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(-1)
+        print(f"Memainkan: {music_file}")
+    except pygame.error:
+        print(f"⚠️ {music_file} tidak ditemukan!")
+    # ==========================================
+
     game_over = False
     game_close = False
 
-    # === PERBAIKAN DI SINI ===
-    # Memastikan posisi awal ular sejajar dengan grid
     x = round((width / 4) / block) * block
     y = round((height / 2) / block) * block
-    
     x_change = block
     y_change = 0
 
@@ -114,10 +136,10 @@ def gameLoop():
     foody = round(random.randrange(block, height - 2 * block) / block) * block
 
     walls = [
-        [0, 0, width, block],  # atas
-        [0, height - block, width, block],  # bawah
-        [0, 0, block, height],  # kiri
-        [width - block, 0, block, height]  # kanan
+        [0, 0, width, block],
+        [0, height - block, width, block],
+        [0, 0, block, height],
+        [width - block, 0, block, height]
     ] + wall_defs
 
     while not game_over:
