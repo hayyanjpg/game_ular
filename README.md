@@ -39,13 +39,8 @@ Pastikan Anda sudah menginstal **Python 3** di sistem Anda.
 
 Buka terminal atau command prompt, lalu klon repositori ini:
 ```bash
-<<<<<<< main
 git clone https://github.com/hayyanjpg/game_ular.git
 cd game_ular
-=======
-git clone [https://github.com/hayyanjpg/game_ular.git]
->>>>>>> main
-```
 
 ### 3. Instalasi Dependensi
 
