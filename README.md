@@ -54,7 +54,7 @@ pip install pygame
 Pastikan semua file suara (.mp3, .wav) berada di dalam folder `assets` agar game dapat memuatnya dengan benar.
 ```
 .
-├── nama_game.py
+├── game_ular.py
 └── assets/
     ├── suara_makan.mp3
     ├── backsound.wav
