@@ -42,7 +42,6 @@ Buka terminal atau command prompt, lalu klon repositori ini:
 git clone https://github.com/hayyanjpg/game_ular.git
 cd game_ular
 ```
-*Ganti `[nama-anda]` dan `[nama-repositori]` dengan username dan nama repositori GitHub Anda.*
 
 ### 3. Instalasi Dependensi
 
