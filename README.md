@@ -70,7 +70,6 @@ python nama_game.py
 ```
 *Ganti `nama_game.py` dengan nama file Python Anda.*
 
----
 
 ## Lisensi
 
