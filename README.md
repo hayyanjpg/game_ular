@@ -41,7 +41,6 @@ Buka terminal atau command prompt, lalu klon repositori ini:
 ```bash
 git clone [(https://github.com/hayyanjpg/game_ular.git]
 ```
-*Ganti `[nama-anda]` dan `[nama-repositori]` dengan username dan nama repositori GitHub Anda.*
 
 ### 3. Instalasi Dependensi
 
@@ -65,9 +64,9 @@ Pastikan semua file suara (.mp3, .wav) berada di dalam folder `assets` agar game
 
 Eksekusi file Python utama untuk memulai permainan.
 ```bash
-python nama_game.py
+game_ular.py
 ```
-*Ganti `nama_game.py` dengan nama file Python Anda.*
+* sesuain aja  disini aku namainnya `game_ular.py` 
 
 
 ## Lisensi
