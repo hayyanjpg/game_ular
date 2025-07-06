@@ -5,7 +5,6 @@ Sebuah game Snake klasik yang dibangun menggunakan Python dan library Pygame. Ga
 ![Gameplay Snake Game](https://user-images.githubusercontent.com/2646532/121356963-df5f6180-c97c-11eb-9c29-399a99787a17.gif)
 *Catatan: Anda bisa mengganti gambar di atas dengan screenshot atau GIF dari game Anda.*
 
----
 
 ## Deskripsi
 
