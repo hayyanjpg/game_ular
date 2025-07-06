@@ -39,8 +39,7 @@ Pastikan Anda sudah menginstal **Python 3** di sistem Anda.
 
 Buka terminal atau command prompt, lalu klon repositori ini:
 ```bash
-git clone [https://github.com/](https://github.com/)[nama-anda]/[nama-repositori].git
-cd [nama-repositori]
+git clone [(https://github.com/hayyanjpg/game_ular.git]
 ```
 *Ganti `[nama-anda]` dan `[nama-repositori]` dengan username dan nama repositori GitHub Anda.*
 
