@@ -18,7 +18,7 @@ BLUE = (0, 0, 255)
 GRAY = (180, 180, 180)
 
 win = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Snake Game - Edisi Perbaikan")
+pygame.display.set_caption("Snake Game - Edisi Progresif")
 font = pygame.font.SysFont("comicsansms", 25)
 clock = pygame.time.Clock()
 
@@ -120,7 +120,7 @@ def choose_level():
 
 def gameLoop():
     level_name = choose_level()
-    speed, wall_defs = get_level_data(level_name)
+    initial_speed, wall_defs = get_level_data(level_name)
     
     if level_name in ["normal", "hard"]:
         music_file = "menengah.wav"
@@ -141,6 +141,10 @@ def gameLoop():
     game_close = False
     paused = False
     highscore = load_highscore()
+
+    # --- PERUBAHAN 1: Variabel untuk kecepatan dinamis ---
+    current_speed = initial_speed
+    speed_increment = 1 # Kecepatan akan bertambah 1 setiap 5 skor
 
     x = round((WIDTH / 4) / BLOCK_SIZE) * BLOCK_SIZE
     y = round((HEIGHT / 2) / BLOCK_SIZE) * BLOCK_SIZE
@@ -232,7 +236,9 @@ def gameLoop():
                 game_close = True
 
         draw_snake(snake_list)
-        draw_text(f"Skor: {snake_length - 1} | Skor Tertinggi: {highscore}", BLACK, WIDTH / 2, 30)
+        # --- PERUBAHAN 2: Tampilkan kecepatan saat ini di layar ---
+        score_text = f"Skor: {snake_length - 1} | Kecepatan: {int(current_speed)}"
+        draw_text(score_text, BLACK, WIDTH / 2, 30)
         pygame.display.update()
 
         if x == foodx and y == foody:
@@ -240,6 +246,12 @@ def gameLoop():
             if eat_sound:
                 eat_sound.play()
             
+            # --- PERUBAHAN 3: Logika peningkatan kecepatan ---
+            current_score = snake_length - 1
+            if current_score > 0 and current_score % 5 == 0:
+                current_speed += speed_increment
+                print(f"Skor mencapai {current_score}! Kecepatan meningkat menjadi: {current_speed}")
+
             while True:
                 foodx = round(random.randrange(BLOCK_SIZE, WIDTH - 2 * BLOCK_SIZE) / BLOCK_SIZE) * BLOCK_SIZE
                 foody = round(random.randrange(BLOCK_SIZE, HEIGHT - 2 * BLOCK_SIZE) / BLOCK_SIZE) * BLOCK_SIZE
@@ -250,7 +262,8 @@ def gameLoop():
                 if not food_in_wall and not food_in_snake:
                     break
         
-        clock.tick(speed)
+        # --- PERUBAHAN 4: Gunakan variabel kecepatan dinamis ---
+        clock.tick(current_speed)
 
     pygame.quit()
     quit()
